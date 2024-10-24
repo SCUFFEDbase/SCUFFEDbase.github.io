@@ -27,7 +27,7 @@ self.addEventListener('sync', event => {
 async function syncPosts() {
   const posts = await fetch('/posts').then(response => response.json());
   const postsContainer = document.getElementById('posts-container');
-  postsContainer.innerHTML = '<h2>Most Recent Posts</h2>';
+  postsContainer.innerHTML = '<h2>Most Recent Drops</h2>';
   posts.forEach(post => {
     const postElement = document.createElement('div');
     postElement.className = 'post';
