@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCUFFED</title>
+    <title>SCUFFEDbase</title>
     <style>
         body {
             background-color: black;
@@ -65,7 +65,7 @@
     <div class="container">
         <h1>SCUFFEDbase</h1>
         <div class="form-container">
-            <h2>drop someone</h2>
+            <h2>drop a person</h2>
             <form id="post-form">
                 <input type="text" id="title" placeholder="Title" required>
                 <textarea id="content" placeholder="Content" required></textarea>
@@ -73,26 +73,33 @@
             </form>
         </div>
         <div class="posts-container" id="posts-container">
-            <h2>Most Recent drops</h2>
+            <h2>Most Recent Drops</h2>
         </div>
     </div>
     <script>
-        document.getElementById('post-form').addEventListener('submit', function(event) {
+        document.getElementById('post-form').addEventListener('submit', async function(event) {
             event.preventDefault();
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
 
-            // Simulate sending data to the server
-            const post = { title, content };
-            posts.push(post);
-            document.getElementById('title').value = '';
-            document.getElementById('content').value = '';
-            fetchPosts();
+            const response = await fetch('/create-post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, content }),
+            });
+
+            if (response.ok) {
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                fetchPosts();
+            }
         });
 
-        let posts = [];
-
-        function fetchPosts() {
+        async function fetchPosts() {
+            const response = await fetch('/posts');
+            const posts = await response.json();
             const postsContainer = document.getElementById('posts-container');
             postsContainer.innerHTML = '<h2>Most Recent Posts</h2>';
             posts.forEach(post => {
@@ -107,6 +114,17 @@
         }
 
         fetchPosts();
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
