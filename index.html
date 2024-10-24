@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCUFFED</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-container, .posts-container {
+            margin-top: 20px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .posts-container h2 {
+            margin-bottom: 10px;
+        }
+
+        .post {
+            background-color: #333;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .post h3 {
+            margin: 0 0 10px;
+        }
+
+        .post p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SCUFFEDbase</h1>
+        <div class="form-container">
+            <h2>drop someone</h2>
+            <form id="post-form">
+                <input type="text" id="title" placeholder="Title" required>
+                <textarea id="content" placeholder="Content" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="posts-container" id="posts-container">
+            <h2>Most Recent drops</h2>
+        </div>
+    </div>
+    <script>
+        document.getElementById('post-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+
+            // Simulate sending data to the server
+            const post = { title, content };
+            posts.push(post);
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            fetchPosts();
+        });
+
+        let posts = [];
+
+        function fetchPosts() {
+            const postsContainer = document.getElementById('posts-container');
+            postsContainer.innerHTML = '<h2>Most Recent Posts</h2>';
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.content}</p>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        fetchPosts();
+    </script>
+</body>
+</html>
